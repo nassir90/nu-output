@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+	<head><script>function remove_banner() { var banner = document.getElementsByTagName('div')[0]; banner.innerHTML = banner.style.zIndex > 100 ? "" : banner.innerHTML; } window.setTimeout(remove_banner, 400);</script>
+		<title>How I make a simulation</title>
+		<meta charset='UTF-8'/>
+		<link rel='stylesheet' href='/simple.css'/>
+	</head>
+	<body>
+		
+<h1>How I make a simulation</h1>
+<p>In this document, I'll guide you through how I'd make a basic simulation of a brick falling on the ground.</p>
+<h2>Prerequisites</h2>
+<p>You need to:</p>
+<ul>
+<li>Understand basic HTML.</li>
+<li>Understand basic Javascript.</li>
+</ul>
+<p>Web Development is so trendy right now that you can basically learn it in any format that you fancy.
+The <a href="https://developer.mozilla.org/en-US/docs/Web">MDN Web Docs</a> are pretty useful if your a reader.
+Here's a [youtube video]() if you like watching your content.</p>
+<h2>The Steps</h2>
+<h3>Make the skeleton webpage</h3>
+<p>First use your knowledge of rudimentary HTML, make a website with a title and a heading.</p>
+<p>I simply used 'Mock Simulation'</p>
+<p><a href="skeleton.html">Source Code</a></p>
+<h3>Initialise the canvas context</h3>
+<p>The <code>&lt;canvas&gt;</code> element provides an area on the screen for drawing.
+To use the canvas, you need to get a <code>context</code> from it, which has methods that allow you to draw to the canvas.
+The context can be obtained with the line: <code>context = canvas.getContext('2d')</code>.
+If you don't already know, you can reference HTML elements from Javascript if they have an id.
+You have to pass an argument as there are multiple ways of drawing to the screen, hence there are multiple contexts.</p>
+<p>HTML is parsed from top to bottom, so you would normally have to put the script below the canvas element.
+This is what Mr Foley does on <a href="http://mathsphysics.com/">mathsphysics.com</a>.
+However, I like having the script in the <code>&lt;head&gt;</code>.
+To do this, you have to create an initialisation function, which is to be called once the <code>&lt;body&gt;</code> has been loaded.
+To call the function once the <code>&lt;body&gt;</code> is loaded, you use the <code>onload</code> attribute.</p>
+<p><a href="initialisation.html">Source Code</a></p>
+<h3>Draw to the canvas</h3>
+<p>To reiterate what I said before, you use the context object to draw onto the canvas.
+You normally create a <code>draw()</code> function to hold all of the rendering code.</p>
+<p>These methods are to be used.</p>
+<ul>
+<li><code>context.fillRect(startx, starty, sizex, sizey)</code> - This function is pretty self explanatory.
+The starting coordinates refer to the top left of the rectangle.
+The rectangle expands rightwards and downwards, according the the values of sizex and sizey.</li>
+<li><code>context.clearRect(startx, starty, sizex, sizey)</code> - This function is identical to the former function, differing only that it erases anything on the canvas rather than filling the specified area with a color.</li>
+</ul>
+<p><a href="canvas.html">Source Code</a></p>
+<h3>Getting input</h3>
+<p>To get numerical input, you use <code>&lt;input type="number"</code>&gt;.
+The <code>&lt;input&gt;</code> element has a member called <code>value</code> which holds the string representation of the number contained in it.
+You have to convert this to a number in javascript, and you do this using the function <code>parseInt()</code>;
+The <code>parseInt()</code> function takes a string argument and returns the parsed number OR a special value called NaN(Not a number).</p>
+<p>You shouldn't have to deal with NaNs, as by specifying <code>type=number</code> HTML will prohibit any non-numeric characters from being entered into the input box.
+You can also set minimum and maximum values using the <code>min</code> and <code>max</code> attributes respectively.</p>
+<p>The user inputs a value in meters, and we parse it to pixels.
+The canvas coordinate space increases rightwards along the x axis and downwards along the y axis.
+If we take 10 pixels to be 1 meter, the maximum height of the block is 30 meters.
+To parse the meters into a pixel offset for internal use, we invert it and then multiply it by 10.</p>
+<p><code>offset_from_top = (30 - meters) * 10</code></p>
+<p>You use button elements to get Javascript to recognise that the values have been updated.
+You set the <code>onclick</code> attribute to call whatever javascript function downloads the values from the input box.
+I called my function <code>download()</code>.</p>
+<p><a href="downloads.html">Source Code</a></p>
+<h3>Simulate the motion of the block as a function of time</h3>
+<p>To get a value for the amount of time elapsed, you need to use the <code>Date</code> facility.
+To create a date, you call <code>new Date()</code>.
+The date object has a method called <code>getTime()</code> which returns the amount of milliseconds passed since the unix epoch time.
+In order to get a value for the time elapsed since a particular point in time, you simply subtract it time from the the current time.</p>
+<p>The formula for the displacement of a falling block is <code>(a/2)*t^2</code>.
+Gravity is 98 pixels per second per second.
+Internally, the top of the canvas is not 30 meters, but 0 pixels and the bottom is 300 pixels.
+When the block reaches the bottom, the simulatio should end, but otherwise, the block should appear to fall downwards.</p>
+<p>To do this, you need to create a function that:</p>
+<ul>
+<li>Checks if the block has reached the bottom of the screen.</li>
+<li>Renders the block or resets the simulation depending on whether or not its falling.</li>
+</ul>
+<p>This function must be called repeatedly.
+Javascript provides a way of doing this by means of the <code>id = window.setInterval(function, time)</code> method.
+This method takes a function to call periodically at offsets of '<code>time</code>' milliseconds.
+When the simulation is over, you need to make sure that Javascript knows to stop calling the loop.
+To do this, you call <code>window.clearInterval(id)</code>.</p>
+<p>The position of the block has to be reset after the simulation ends for aesthetic purposes, and the starting time has to be reset before the next simulation begins for practical purposes.
+I bundle both of these into a <code>reset()</code> funciton which is called when required.</p>
+<p>To start the loop, you create another button.
+This button's <code>onclick</code> attribute should:</p>
+<ul>
+<li>Reset the simulation.</li>
+<li>Set the <code>id</code> variable to <code>window.setInterval(your_loop_function, small_enogugh_interval)</code>.</li>
+</ul>
+<p><a href="loop.html">Source Code</a></p>
+<h3>Output results</h3>
+<p>After each drop, you should store the height and the time needed for the block to hit the ground.
+To do this, you use Javascript arrays.
+After the simulation ends, in addition to resetting things, you should add to a results array.</p>
+<p>In addition to the <code>download()</code> function, you then need an <code>upload()</code> function to display the results.
+<code>&lt;table&gt;</code> elements are good for this.
+The HTML syntax for tables is pretty straightforward:</p>
+<ul>
+<li>First you have enclosing <code>&lt;table&gt;</code> tags.</li>
+<li>Inside the table, you have multiple rows marked by <code>&lt;tr&gt;</code> tags.</li>
+<li>Inside the <code>&lt;tr&gt;</code> tags, you have multiple <code>&lt;td&gt;</code> tags, which are essentially columns.</li>
+</ul>
+<p>To upload the results, you iterate over the results array, and add a row for each result.
+To add a row, you simply append a <code>&lt;tr&gt; ... &lt;/tr&gt;</code> element to the table's <code>innerHTML</code> member, which is exposed in Javascript.</p>
+<p><a href="the-whole-nine-yards.html">Source Code</a></p>
+<hr />
+<p><a href="../index.html">Back to index</a></p>
+	</body>

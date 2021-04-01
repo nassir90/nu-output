@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<?$counter = 0?>
+
+<head><script>function remove_banner() { var banner = document.getElementsByTagName('div')[0]; banner.innerHTML = banner.style.zIndex > 100 ? "" : banner.innerHTML; } window.setTimeout(remove_banner, 400);</script>
+	<title>Flash card app</title>
+	<link rel="stylesheet" href="simple.css">
+
+	<script>
+
+	var cards = {1: ["Red litmus paper", "Indication of an acid"],
+2: ["X-basic acid", "An acid that dissociates to produce X H+ ions in water"],
+3: ["Triprotic acid", "Tribasic acid, such as H3PO4"],
+4: ["Arrhenious' definition of an acid", "A substance that dissociates in water to produce H+ ions"],
+5: ["Arrhenious' definition of a base", "A substance that dissociates in water to produce OH- ions"],
+6: ["Oxonium ion", "H3O+"],
+7: ["Dative covalent bond", "One where both electrons come from the same atom"],
+};
+
+	var counter = 7;
+
+	function reconstruct_selector() {
+		card_list.innerHTML = "";
+		var keys = Object.keys(cards);
+		for(i = 0; i < keys.length; i++) {
+			card_list.innerHTML += "<tr><td><button onclick=\"update_card_bay(this);\" data-id='" + keys[i] +"'>" + cards[keys[i]][0] + "</button></td></tr>\n";
+		}
+	}
+
+	function toggle_blur(element) {
+		element.style.filter = element.style.filter == "none" ? "blur(3px)" : "none";
+	}
+
+	window.onkeyup = function(e) {
+		if (e.keyCode == 65) {
+			toggle_blur(left);
+		} else if (e.keyCode == 68) {
+			toggle_blur(right);
+		}
+	}
+
+	function update_card_bay(button) {
+		var parts = cards[parseInt(button.getAttribute("data-id"))];
+		left.innerHTML = parts[0];
+		right.innerHTML = parts[1];
+	}
+
+	function pop_inputs() {
+		var left = left_input.value.trim();
+		var right = right_input.value.trim();
+
+		// genesis 6:5
+		if (left.length && right.length) {
+			cards[++counter] = [left, right];
+			reconstruct_selector();
+			left_input.value = "";
+			right_input.value = "";
+		}
+	}
+
+	</script>
+	
+	<style>
+		table {
+			width: 100%;
+			table-layout: fixed;
+		}
+	</style>
+
+</head>
+
+<body onload="reconstruct_selector()">
+	<header><h1>Flash card app</h1></header>
+	<section>
+		<noscript><strong>Your client can't run javascript. You're probably better off to be honest.</strong></noscript>
+		<h4>Card bay</h4>
+		<table style="height: 150px">
+			<td><button id="left" onclick="toggle_blur(this)">N/A</td>
+			<td><button id="right" onclick="toggle_blur(this)">N/A</td>
+		</table>
+
+		<h4>Change deck/card</h4>
+		<div style="height: 200px; overflow: auto">
+			<table id="card_list"></table>
+		</div>
+		<table>
+			<td><textarea id="left_input">9+10</textarea></td>
+			<td><textarea id="right_input">21</textarea></td>
+			<td><button onclick="pop_inputs();">Add</button></td>
+		</table>
+
+	</section>
+	<footer><hr/><a href="index.html">Home</a></footer>
+</body>

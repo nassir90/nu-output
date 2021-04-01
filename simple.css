@@ -1,0 +1,33 @@
+
+body { 
+	margin-left: 8%;
+	margin-right: 8%;
+}
+
+body, a {
+	background: hsl(100, 10%, 60%);
+	color: hsl(100, 10%, 5%);
+}
+
+hr {
+	border: 2px solid hsl(100, 10%, 40%);
+}
+
+canvas {
+	border: 3px inset hsl(100, 10%, 5%);
+	background: hsl(100, 10%, 40%);
+}
+
+h1, td, textarea, button, input {
+	background: hsl(100, 10%, 5%);
+	border: 3px inset hsl(100, 10%, 5%);
+	color: hsl(100, 10%, 60%);
+}
+
+td button, td textarea, td fieldset, td input {
+	background-color: inherit;
+	color: inherit;
+	border: none;
+	text-align: left;
+	resize: none;
+}
