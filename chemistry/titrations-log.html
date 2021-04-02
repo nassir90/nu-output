@@ -12,7 +12,7 @@
 <p>I need to:</p>
 <ul>
 <li>Port the calculations into javascript, and display the results on a table.
-The calculations take inputs and produce outputs, so I'll use the upload/download system that I used <a href="../appliedmaths/connectedparticles.html">here</a>.</li>
+The calculations take inputs and produce outputs, so I'll use the upload/download system that I used <a href="../appliedmaths/inclinedplane.html">here</a>.</li>
 <li>Make graphics for all the apparatus.
 This is a more laborious task, but doable.
 I might just use squares for the MVP.</li>
@@ -21,6 +21,8 @@ There's an argument to be made that if the page is informative, it should have n
 <li>Integrate the calculation part in with the simulation part.
 I'm not actually going to let the user let the burette run.
 I'll just put it on train tracks.</li>
+<li>Allow the user to decide whether to use a known base volume OR a random base volume due to a random molarity.</li>
+<li>Allow the user to switch between unknown base properties and unknown acid properties.</li>
 </ul>
 <p>I want to:</p>
 <ul>
@@ -34,5 +36,7 @@ I could have them all be visible.
 If it's too ugly, I'll just use the javascript only method.</li>
 </ul>
 <h2>Implementation</h2>
+<p>As for allowing the user to switch the substance whose properties are unknown, I considered putting all references to acid or base in <code>&lt;span&gt;</code> tags, and switching them depending on the unknown substance.
+I don't know whether or not this is a good idea.</p>
 <h2>Evaluation</h2>
 	</body>

@@ -23,20 +23,20 @@
 		
 		function draw() {
 			context.clearRect(0, 0, canvas.width, canvas.height);
-			context.fillRect(40, mass_y, meters_to_pixels(2), meters_to_pixels(2));
+			context.fillRect(40, mass_y+20, meters_to_pixels(2), meters_to_pixels(2));
 			
 			context.beginPath();
 			for (i=300; i > 0; i-=10) {
 				context.moveTo(0, i+20);
 				context.lineTo(35, i+20);
-				context.fillText(pixels_to_meters(300-i).toPrecision(2)+"m", 0, i+20);
+				context.fillText(pixels_to_meters(300-i).toFixed(1)+"m", 0, i+20);
 			}
 			context.stroke();
 		}
 		
 		function fall() {
 			if (mass_y < 300) {
-				mass_y = gravity/2 * local_time ** 2;
+				mass_y = gravity/2 * Math.pow(local_time,2);
 				local_time += unit_meaning;
 				draw();
 				window.setTimeout(fall, timeout);
