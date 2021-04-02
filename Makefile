@@ -1,2 +1,2 @@
 default:
-	cp -r ../nazauzoukwu.xyz/output/* ./
+	cp -frL ../nazauzoukwu.xyz/output/* ./
