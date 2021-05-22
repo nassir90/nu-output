@@ -149,8 +149,12 @@ function holy_trinity() {
 }
 
 function start() {
-	time_elapsed = 0;
-	loop_timer = window.setInterval(simulate, timeout);
+	if (!loop_timer) {
+		time_elapsed = 0;
+		loop_timer = window.setInterval(simulate, timeout);
+	} else {
+		alert("Good scientists are patient");
+	}
 }
 
 function simulate() {
@@ -162,7 +166,7 @@ function simulate() {
 		time_elapsed += unit_meaning;
 	} else {
 		upload();
-		window.clearTimeout(loop_timer);
+		loop_timer = window.clearInterval(loop_timer);
 	}
 	
 }
@@ -170,12 +174,14 @@ function simulate() {
 function draw() {
 	context.clearRect(0,0,200,400);
 
-	// Draw burette
-	context.fillRect(95,25+volume_of_base_drained*10000, 10, 250-volume_of_base_drained*10000);
-	context.strokeRect(95,25, 10, 250);
+	var volume_of_liquid_in_conical_flask = (volume_of_base+volume_of_acid) * 0.01; // We have to convert liters to meters cubed
+	var conical_flask_radius = Math.pow(3*(volume_of_liquid_in_conical_flask+0.01*0.025) /*We leave some extra room*//(14.0*Math.PI), 1.0/3.0);
 
-	var volume_of_liquid_in_conical_flask = (volume_of_base + volume_of_acid) * 0.01; // We have to convert liters to meters cubed
-	var conical_flask_radius = Math.pow((3*volume_of_liquid_in_conical_flask + 3*0.01*0.025 /*We leave some extra room*/)/(16.0*Math.PI), 1.0/3.0);
+	var top_of_flask = 390 - 4 * conical_flask_radius * 500;
+
+	// Draw burette
+	context.fillRect(95,(top_of_flask-10-250)+volume_of_base_drained*10000, 10, 250-volume_of_base_drained*10000);
+	context.strokeRect(95, top_of_flask-250-10, 10, 250);
 
 	context.beginPath();
 	context.moveTo(100 - 2 * conical_flask_radius * 500, 390);
@@ -185,8 +191,13 @@ function draw() {
 	context.closePath();
 	context.stroke();
 
-	var imaginary_cone_radius = Math.pow(3*(volume_of_liquid_in_conical_flask - volume_of_base_drained*0.01)/(16.0*Math.PI), 1.0/3.0);
-	var liquid_height = 4 * conical_flask_radius - 4 * imaginary_cone_radius;
+	// Here lies my fatal flaw. All laugh and mock.
+	// What I have done is constructed the imaginary triangle out of the volume that is held in the conical flask.
+	// In doing this, the cone appears as a triangle when the conical flask is at capacity, rather than remaining within the bounds of the flask.
+	// I am supposed to construct an immaginary volume, which I then use to find the liquid height
+	var imaginary_cone_volume = (1.0/3.0)*(Math.PI*Math.pow(2*conical_flask_radius,2))*4*conical_flask_radius;
+	var imaginary_cone_radius = Math.pow(3*(imaginary_cone_volume - (volume_of_base_drained + volume_of_acid)*0.01)/(16.0*Math.PI), 1.0/3.0);
+	var liquid_height = 4 * (conical_flask_radius - imaginary_cone_radius);
 	context.beginPath();
 	context.moveTo(100 - 2 * conical_flask_radius * 500, 390);
 	context.lineTo(100 + 2 * conical_flask_radius * 500, 390);
@@ -196,10 +207,11 @@ function draw() {
 	context.fill();
 
 	// Draw the neck
+	//
 	context.beginPath();
 	context.moveTo(100 - conical_flask_radius * 500, 390 - 2 * conical_flask_radius * 500);
-	context.lineTo(100 - conical_flask_radius * 500, 390 - 6 * conical_flask_radius * 500);
-	context.lineTo(100 + conical_flask_radius * 500, 390 - 6 * conical_flask_radius * 500);
+	context.lineTo(100 - conical_flask_radius * 500, 390 - 4 * conical_flask_radius * 500);
+	context.lineTo(100 + conical_flask_radius * 500, 390 - 4 * conical_flask_radius * 500);
 	context.lineTo(100 + conical_flask_radius * 500, 390 - 2 * conical_flask_radius * 500);
 	context.stroke();
 }
