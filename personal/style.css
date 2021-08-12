@@ -1,0 +1,75 @@
+body {
+	background-color: lightgrey;
+}
+
+.shadow {
+	box-shadow: 0px 2px 5px 1px grey;
+	background-color: white;
+	border-radius: 5px;
+}
+
+nav a {
+	margin: 10px;
+	padding: 5px;
+}
+
+header nav {
+	align-self: center;
+}
+
+a:hover {
+	background-color: lightgrey;
+}
+
+.project-tile {
+	width: 128px;
+	height: 128px;
+	overflow: hidden;
+	text-align: center;
+	display: inline-block;
+	padding: 10px;
+}
+
+.project-tile img {
+	width: 128px;
+}
+
+header {
+	display: flex;
+	justify-content: space-between;
+	padding: 0px 10px;
+}
+
+#welcome-flex {
+	display: flex;
+	height: calc(99vh - 85px);
+	margin-bottom: 1vh;
+}
+
+[src="transparent-profile.png"] {
+	opacity: 0.9;
+	position: relative;
+	top: 30px;
+	z-index: -1;
+}
+
+#welcome{
+	flex-basis: 50%;
+	align-self: center;
+	text-align: center;
+}
+
+section {
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
+@media (max-aspect-ratio: 4/3) {
+	#welcome-flex {
+		flex-direction: column;
+	}
+
+	#welcome {
+		margin-left: 0px;
+	}
+}
